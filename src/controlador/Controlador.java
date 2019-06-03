@@ -45,7 +45,7 @@ public class Controlador {
     int P1;                         //contaminacion producida por el gran productor
     int P2;                         //contaminacion producida por el mediano Productor
     int P3;                         //contanminacion Producida por el Pequeño productor
-    int O = 1;                        //contador para las Hectareas
+    int O = 0;                        //contador para las Hectareas
     int TIE = 0;                        //Tiempo de quema
     int TIE1 = 0;                     //Acumulador de tiempo del mediano
     int TIE2 = 0;                     //Acumulador de tiempo del pequeño
@@ -105,7 +105,7 @@ public class Controlador {
                         O++;
 
                     }
-
+                    System.out.println("Tiempo total de la quema de Hectareas:" + TT1);
                     CON = P1 / TT1;
                     System.out.println("Concentracion de PM10:" + CON);
                     CT = CT + CON;
@@ -128,7 +128,7 @@ public class Controlador {
                             O++;
 
                         }
-
+                    System.out.println("Tiempo total de la quema de Hectareas:" + TT2);
                         CON = P2 / TT2;
                         System.out.println("Concentracion de PM10:" + CON);
                         CT = CT + CON;
@@ -151,7 +151,7 @@ public class Controlador {
                              O++;
 
                         }
-
+                        System.out.println("Tiempo total de la quema de Hectareas:" + TT3);
                         CON = P3 / TT3;
                         System.out.println("Concentracion de PM10:" + CON);
                         CT = CT + CON;

@@ -138,7 +138,7 @@ public class Controlador {
                         guardarvariable = getGU();
                         T2 = 20 + (int) (20 *  guardarvariable);
                         System.out.println("\n Toneladas del Productor pequeño:" + T2);
-                        HA2 = T1 / 40;
+                        HA2 = T2 / 40;
                         if(HA2==0)
                         {HA2=1;}
                         P3 = HA2 * 76;

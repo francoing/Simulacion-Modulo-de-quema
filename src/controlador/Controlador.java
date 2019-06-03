@@ -80,18 +80,19 @@ public class Controlador {
             System.out.println("habitantes: " + H + "\n distancia:" + D + "\n velocidad: " + V + "\n estabilidad: " + GA + "\n dispersion Y: " + DISY + "\n Dispersion: " + DISZ);
 
             // guardarvariable=getGU();  //llama Gu(U)
+              
             while (i <= 150)//while de periodo de zafra
             {
 
                 guardarvariable = getGU();  //llama Gu(U)
-                DQ = Math.round((-5.76) * Math.log((int) guardarvariable));
+                DQ = Math.round((-5.76) * Math.log(guardarvariable));
                 System.out.println("\nDQ es: " + DQ);
 
                 //i = i + DQ;
                 guardarvariable = getGU();  //llama Gu(U)
                 if (guardarvariable <= 0.11) {
                     guardarvariable = getGU();
-                    T = 70000 + 14000 * (int) guardarvariable;
+                    T = 70000 +(int)(14000 * guardarvariable);  
                     System.out.println("\n Toneguardarvariableladas del productor grande: " + T);
                     HA = T / 40;
                     P1 = HA * 76;
@@ -101,7 +102,7 @@ public class Controlador {
                         guardarvariable = getGU();
                         TIE = 10 + 50 * (int) guardarvariable;
                         TT1 = TT1 + TIE;
-                        O = O++;
+                        O++;
 
                     }
 
@@ -114,7 +115,7 @@ public class Controlador {
                 } else {
                     if (guardarvariable <= 0.35) {
                         guardarvariable = getGU();
-                        T1 = 4000 + 500 * (int) guardarvariable;
+                        T1 = 4000 +(int) (500 * guardarvariable);
                         System.out.println("\n Toneladas del productor mediano: " + T1);
                         HA1 = T1 / 40;
                         P2 = HA1 * 76;
@@ -122,9 +123,9 @@ public class Controlador {
                         //---------------------- Tiempo de quema de las Hectareas--------------------------------------------//
                         while (O <= HA1) {
                             guardarvariable = getGU();
-                            TIE1 = 10 + 50 * (int) guardarvariable;
+                            TIE1 = 10 + (int)(50 *  guardarvariable);
                             TT2 = TT2 + TIE1;
-                            O = O++;
+                            O++;
 
                         }
 
@@ -135,17 +136,19 @@ public class Controlador {
                         //--------------------------------------------------------------------------------------------------//
                     } else {
                         guardarvariable = getGU();
-                        T2 = 20 + 20 * (int) guardarvariable;
+                        T2 = 20 + (int) (20 *  guardarvariable);
                         System.out.println("\n Toneladas del Productor pequeño:" + T2);
                         HA2 = T1 / 40;
+                        if(HA2==0)
+                        {HA2=1;}
                         P3 = HA2 * 76;
                         System.out.println("Hectareas quemadas:" + HA2);
                         //---------------------- Tiempo de quema de las Hectareas--------------------------------------------//
                         while (O <= HA2) {
                             guardarvariable = getGU();
-                            TIE2 = 10 + 50 * (int) guardarvariable;
+                            TIE2 = 10 +(int) (50 * guardarvariable);
                             TT3 = TT3 + TIE2;
-                            O = O++;
+                             O++;
 
                         }
 
@@ -161,13 +164,14 @@ public class Controlador {
                 //---------------------------------Velocidad----------------------------------------------------------------
 
                 guardarvariable = getGU();
-                VE = 8 + 12 * (int) guardarvariable;
+                VE = 8 + 12 *  guardarvariable;
 
-                
-                
-                i = i + DQ;
+                 O=0;
+                 i=i+(int)DQ;
+                   System.out.println("\nSumando: "+i);
+             
             }
-
+ 
         }
 
     }

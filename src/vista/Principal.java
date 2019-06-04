@@ -51,13 +51,13 @@ public class Principal extends javax.swing.JFrame {
         quema = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         viento = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        estabilidad = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
+        vientomaximo = new javax.swing.JTextField();
         y = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         z = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         btnlimpiar = new javax.swing.JButton();
 
         jButton2.setText("jButton2");
@@ -111,15 +111,11 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setText("Velocidad del Viento");
-
-        estabilidad.addKeyListener(new java.awt.event.KeyAdapter() {
+        vientomaximo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                estabilidadKeyTyped(evt);
+                vientomaximoKeyTyped(evt);
             }
         });
-
-        jLabel4.setText("Grado de Estabilidad");
 
         y.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -142,6 +138,10 @@ public class Principal extends javax.swing.JFrame {
 
         jLabel8.setText("Dispersion Z");
 
+        jLabel3.setText("Velocidad del Viento Minimo");
+
+        jLabel4.setText("Velocidad del Viento Maximo");
+
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
         panel1Layout.setHorizontalGroup(
@@ -153,25 +153,27 @@ public class Principal extends javax.swing.JFrame {
                         .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(y, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
                             .addComponent(z))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(139, 139, 139))
+                        .addGap(145, 145, 145))
                     .addGroup(panel1Layout.createSequentialGroup()
                         .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(habitantes, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
                             .addComponent(quema)
                             .addComponent(viento)
-                            .addComponent(estabilidad))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(vientomaximo))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
                             .addGroup(panel1Layout.createSequentialGroup()
                                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE))))))
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addContainerGap())))))
         );
         panel1Layout.setVerticalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,12 +187,12 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(quema, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(viento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addGap(18, 18, 18)
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(estabilidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(vientomaximo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addGap(18, 18, 18)
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -244,14 +246,14 @@ public class Principal extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(31, 31, 31)
                         .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(jLabel6))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, Short.MAX_VALUE)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -337,20 +339,14 @@ public class Principal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_zKeyTyped
 
-    private void estabilidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_estabilidadKeyTyped
-        char c = evt.getKeyChar();
-        int cant = estabilidad.getText().length();
+    private void vientomaximoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_vientomaximoKeyTyped
+       int cant = vientomaximo.getText().length();
 
-        if(!Character.isLetter(c)){
+        if(cant>=5){
             getToolkit().beep();
             evt.consume();
         }
-
-        if(cant>=1){
-            getToolkit().beep();
-            evt.consume();
-        }
-    }//GEN-LAST:event_estabilidadKeyTyped
+    }//GEN-LAST:event_vientomaximoKeyTyped
 
     private void vientoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_vientoKeyTyped
 
@@ -371,7 +367,7 @@ public class Principal extends javax.swing.JFrame {
         habitantes.setText("");
         viento.setText("");
         quema.setText("");
-        estabilidad.setText("");
+        vientomaximo.setText("");
         y.setText("");
         z.setText("");
        
@@ -387,8 +383,8 @@ public class Principal extends javax.swing.JFrame {
      public float getvelocidad(){
         return  Float.parseFloat(viento.getText());
      }
-      public String getestablidad(){
-        return estabilidad.getText();
+      public float getvientomaximo(){
+      return  Float.parseFloat(vientomaximo.getText());
     }
      public int getdispersionY(){
         return  Integer.parseInt(y.getText());
@@ -436,7 +432,6 @@ public class Principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnlimpiar;
-    private javax.swing.JTextField estabilidad;
     private static javax.swing.JTextField habitantes;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -453,6 +448,7 @@ public class Principal extends javax.swing.JFrame {
     private java.awt.Panel panel1;
     private javax.swing.JTextField quema;
     private javax.swing.JTextField viento;
+    private javax.swing.JTextField vientomaximo;
     private javax.swing.JTextField y;
     private javax.swing.JTextField z;
     // End of variables declaration//GEN-END:variables

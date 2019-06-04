@@ -17,6 +17,8 @@ public class Controlador {
 
     /*variables Auxiliares*/
     long i = 0;
+    float monti;
+    double sol;
     /*Pantallas del Modelo*/
     private Principal principal;
 
@@ -27,14 +29,17 @@ public class Controlador {
     /*Distancia del punto de Quema*/
     float V;
     /*Velocidad del Viento*/
-    String GA;
+    float GA;
     /*Grado de estabilidad*/
     int DISY;
     /*Dispersion Z*/
     int DISZ;
     /*Dispersion Y*/
+    double L;                           // ayuda de calculo de la forma
+    double Form;                         //Formula de la concentracion
+    int altura=2;                   // altura de la quema
     float guardarvariable;      //guarda el Gu actual
-    long DQ;                     // dia de quema
+    int DQ;                     // dia de quema
     int T;                         //Toneledas gran produtor
     int T1;                         // Toneladas de mediano productor
     int T2;                         // Toneladas de Pequeño producto
@@ -45,17 +50,19 @@ public class Controlador {
     int P1;                         //contaminacion producida por el gran productor
     int P2;                         //contaminacion producida por el mediano Productor
     int P3;                         //contanminacion Producida por el Pequeño productor
-    int O = 0;                        //contador para las Hectareas
+    int O = 1;                        //contador para las Hectareas
+    int O1 = 1;
+    int O2 = 1;
     int TIE = 0;                        //Tiempo de quema
     int TIE1 = 0;                     //Acumulador de tiempo del mediano
     int TIE2 = 0;                     //Acumulador de tiempo del pequeño
     int TT1 = 0;                      //Acumulador de tiempo del grande
     int TT2 = 0;                        // Acumulador de tiempo del mediano
     int TT3 = 0;                      // Acumulador de tiempo del pequeño
-    float CON;                     //Concentracion 
+    float CON;                    //Concentracion 
     float CT = 0;                   //Concentracion Total
     float VE;                        //Velocidad
-
+ 
     public Controlador() {
         principal = new Principal();
     }
@@ -72,7 +79,7 @@ public class Controlador {
             H = principal.gethabitantes();
             D = principal.getdistancia();
             V = principal.getvelocidad();
-            GA = principal.getestablidad();
+            GA = principal.getvientomaximo(); //Viento maximo
             DISY = principal.getdispersionY();
             DISZ = principal.getdispersionZ();
 
@@ -80,19 +87,21 @@ public class Controlador {
             System.out.println("habitantes: " + H + "\n distancia:" + D + "\n velocidad: " + V + "\n estabilidad: " + GA + "\n dispersion Y: " + DISY + "\n Dispersion: " + DISZ);
 
             // guardarvariable=getGU();  //llama Gu(U)
-              
             while (i <= 150)//while de periodo de zafra
             {
 
                 guardarvariable = getGU();  //llama Gu(U)
-                DQ = Math.round((-5.76) * Math.log(guardarvariable));
+                DQ = (int)((-5.76) *Math.log(guardarvariable));
+                if (DQ < 1 ) {
+                    DQ = 1;
+                }
                 System.out.println("\nDQ es: " + DQ);
 
                 //i = i + DQ;
                 guardarvariable = getGU();  //llama Gu(U)
                 if (guardarvariable <= 0.11) {
                     guardarvariable = getGU();
-                    T = 70000 +(int)(14000 * guardarvariable);  
+                    T = 70000 + (int) (14000 * guardarvariable);
                     System.out.println("\n Toneguardarvariableladas del productor grande: " + T);
                     HA = T / 40;
                     P1 = HA * 76;
@@ -100,13 +109,14 @@ public class Controlador {
                     //---------------------- Tiempo de quema de las Hectareas--------------------------------------------//
                     while (O <= HA) {
                         guardarvariable = getGU();
-                        TIE = 10 + 50 * (int) guardarvariable;
+                        TIE = 10 + (int) (50 * guardarvariable);
                         TT1 = TT1 + TIE;
                         O++;
 
                     }
                     System.out.println("Tiempo total de la quema de Hectareas:" + TT1);
-                    CON = P1 / TT1;
+                    monti = (float) P1 / TT1;
+                    CON=monti;
                     System.out.println("Concentracion de PM10:" + CON);
                     CT = CT + CON;
                     HT = HT + HA;
@@ -115,45 +125,49 @@ public class Controlador {
                 } else {
                     if (guardarvariable <= 0.35) {
                         guardarvariable = getGU();
-                        T1 = 4000 +(int) (500 * guardarvariable);
+                        T1 = 4000 + (int) (500 * guardarvariable);
                         System.out.println("\n Toneladas del productor mediano: " + T1);
                         HA1 = T1 / 40;
                         P2 = HA1 * 76;
                         System.out.println("Hectareas quemadas:" + HA1);
                         //---------------------- Tiempo de quema de las Hectareas--------------------------------------------//
-                        while (O <= HA1) {
+                        while (O1 <= HA1) {
                             guardarvariable = getGU();
-                            TIE1 = 10 + (int)(50 *  guardarvariable);
+                            TIE1 = 10 + (int) (50 * guardarvariable);
                             TT2 = TT2 + TIE1;
-                            O++;
+                            O1++;
 
                         }
-                    System.out.println("Tiempo total de la quema de Hectareas:" + TT2);
-                        CON = P2 / TT2;
+                        System.out.println("Tiempo total de la quema de Hectareas:" + TT2);
+                         monti = (float)P2 / TT2;
+                         CON=monti;
                         System.out.println("Concentracion de PM10:" + CON);
                         CT = CT + CON;
                         HT = HT + HA1;
                         //--------------------------------------------------------------------------------------------------//
                     } else {
                         guardarvariable = getGU();
-                        T2 = 20 + (int) (20 *  guardarvariable);
+                        T2 = 20 + (int) (20 * guardarvariable);
                         System.out.println("\n Toneladas del Productor pequeño:" + T2);
                         HA2 = T2 / 40;
-                        if(HA2==0)
-                        {HA2=1;}
+                        if (HA2 == 0) {
+                            HA2 = 1;
+                        }
                         P3 = HA2 * 76;
                         System.out.println("Hectareas quemadas:" + HA2);
                         //---------------------- Tiempo de quema de las Hectareas--------------------------------------------//
-                        while (O <= HA2) {
+                        while (O2 <= HA2) {
                             guardarvariable = getGU();
-                            TIE2 = 10 +(int) (50 * guardarvariable);
+                            TIE2 = 10 + (int) (50 * guardarvariable);
+                            System.out.println("\nTiempo parcial:" + TIE2);
                             TT3 = TT3 + TIE2;
-                             O++;
+                            O2++;
 
                         }
                         System.out.println("Tiempo total de la quema de Hectareas:" + TT3);
-                        CON = P3 / TT3;
-                        System.out.println("Concentracion de PM10:" + CON);
+                        monti = (float) P3 / TT3;
+                        CON = monti;
+                        System.out.println("Concentracion de PM10: " + CON);
                         CT = CT + CON;
                         HT = HT + HA2;
 
@@ -163,15 +177,28 @@ public class Controlador {
                 }
                 //---------------------------------Velocidad----------------------------------------------------------------
 
-                guardarvariable = getGU();
-                VE = 8 + 12 *  guardarvariable;
+                TT1 = 0;
+                TT2 = 0;
+                TT3 = 0;
 
-                 O=0;
-                 i=i+(int)DQ;
-                   System.out.println("\nSumando: "+i);
-             
+                O = 1;
+                O1 = 1;
+                O2 = 1;
+                i = i + DQ;
+                System.out.println("\nSumando: " + i);
+                
+                guardarvariable = getGU();
+                VE = V + (GA-V)* guardarvariable;
+                System.out.println("\n la velocidad minima del viento es: "+V+"\nla velocidad maxima del viento es: "+GA+"\n Velocidad generada ="+VE);
+                CON=CON*1000/60;
+                L=CON/(2*3.14*DISY*DISZ);
+                System.out.println("\n Con numerador:"+L);
+                sol=4*DISZ*DISZ;
+                 System.out.println("\n Con exponente:"+sol);
+                Form=Math.pow(L,sol);
+                System.out.println("\nConcentracion de PM10:"+Form+"G/m3");
             }
- 
+
         }
 
     }
@@ -213,5 +240,5 @@ public class Controlador {
         return uresultado;
 
     }
-    
+
 }

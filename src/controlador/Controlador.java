@@ -19,6 +19,11 @@ public class Controlador {
     long i = 0;
     float monti;
     double sol;
+    double  R;
+    double TERM1,TERM2;
+    float RES;
+    int Mult;
+    
     /*Pantallas del Modelo*/
     private Principal principal;
 
@@ -84,8 +89,11 @@ public class Controlador {
             DISZ = principal.getdispersionZ();
 
             /*Fin de toma y Declaracion de variables*/
-            System.out.println("habitantes: " + H + "\n distancia:" + D + "\n velocidad: " + V + "\n estabilidad: " + GA + "\n dispersion Y: " + DISY + "\n Dispersion: " + DISZ);
+            System.out.println("habitantes: " + H + "\n distancia:" + D + "\n velocidad minima: " + V + "\n Velocidad maxima: " + GA + "\n dispersion Y: " + DISY + "\n Dispersion Z: " + DISZ);
 
+            
+             
+                
             // guardarvariable=getGU();  //llama Gu(U)
             while (i <= 150)//while de periodo de zafra
             {
@@ -102,7 +110,7 @@ public class Controlador {
                 if (guardarvariable <= 0.11) {
                     guardarvariable = getGU();
                     T = 70000 + (int) (14000 * guardarvariable);
-                    System.out.println("\n Toneguardarvariableladas del productor grande: " + T);
+                    System.out.println("\n Toneladas del Productor grande: " + T);
                     HA = T / 40;
                     P1 = HA * 76;
                     System.out.println("Hectareas quemadas:" + HA);
@@ -114,6 +122,7 @@ public class Controlador {
                         O++;
 
                     }
+                    TT1=TT1/O;
                     System.out.println("Tiempo total de la quema de Hectareas:" + TT1);
                     monti = (float) P1 / TT1;
                     CON=monti;
@@ -138,6 +147,7 @@ public class Controlador {
                             O1++;
 
                         }
+                        TT2=TT2/O1;
                         System.out.println("Tiempo total de la quema de Hectareas:" + TT2);
                          monti = (float)P2 / TT2;
                          CON=monti;
@@ -154,7 +164,7 @@ public class Controlador {
                             HA2 = 1;
                         }
                         P3 = HA2 * 76;
-                        System.out.println("Hectareas quemadas:" + HA2);
+                        System.out.println("Hectareas quemadas:" + HA2+"\nPM10 Generado: "+P3);
                         //---------------------- Tiempo de quema de las Hectareas--------------------------------------------//
                         while (O2 <= HA2) {
                             guardarvariable = getGU();
@@ -164,6 +174,7 @@ public class Controlador {
                             O2++;
 
                         }
+                        TT3=TT3+O2;
                         System.out.println("Tiempo total de la quema de Hectareas:" + TT3);
                         monti = (float) P3 / TT3;
                         CON = monti;
@@ -185,28 +196,48 @@ public class Controlador {
                 O1 = 1;
                 O2 = 1;
                 i = i + DQ;
-                System.out.println("\nSumando: " + i);
                 
-                guardarvariable = getGU();
-                VE = V + (GA-V)* guardarvariable;
-                System.out.println("\n la velocidad minima del viento es: "+V+"\nla velocidad maxima del viento es: "+GA+"\n Velocidad generada ="+VE);
+              guardarvariable = getGU();
+              VE = V + (GA-V)* guardarvariable;
+              System.out.println("\nla velocidad minima del viento es: "+V+"\nla velocidad maxima del viento es: "+GA+"\n Velocidad generada ="+VE);
+               
                 CON=CON*1000/60;
-                L=CON/(2*3.14*DISY*DISZ);
-                System.out.println("\n Con numerador:"+L);
-                sol=4*DISZ*DISZ;
-                 System.out.println("\n Con exponente:"+sol);
-                Form=Math.pow(L,sol);
-                System.out.println("\nConcentracion de PM10:"+Form+"G/m3");
+                System.out.println("\nConcentracion en g/s:" +CON);
+                L=(CON)/((2*3.14)*VE*DISY*DISZ);
+                System.out.println("\nCon base:"+L);
+                Mult=(DISZ*DISZ);
+                System.out.println("Multiplicacion:"+Mult);
+                TERM2= (double)4/(Mult);
+                System.out.println("\nPrimer termino TERM2:"+TERM2);
+                TERM1=(V*V)/(2*DISY*DISY);
+                
+                System.out.println("\nSegundo termino TERM1:"+TERM1);
+                R=(TERM2-TERM1);
+                System.out.println("\nResultado de la resta:"+R);
+                Form=Math.pow((double)L,(double)R)*CON/(DISY*DISY)*0.8;
+               
+                System.out.println("\nDispersion de PM10: "+ Form +" G/m3");
+                //----------------------------------------------comparacion para sacar la poblacion----------------------------------------------
+                if (Form <= 0.00007) {
+                    
+                }else{
+                    if(Form<=0.0000375){
+                    }
+                
+                }
+                System.out.println("\nSumando: " + i);
+                System.out.println("\n--------------------------------------------------------------------------------------------------"); 
             }
-
+            
         }
 
     }
 
     public float getGU() {
-        int proce;//inicio de variables auxliares
+        double aux2=0.53;
+        int proce=0;//inicio de variables auxliares
         float uresultado = 0;
-        int aux;
+        int aux=0;
         float prc = 0; //auxiliar de flotantes
         float md = 0;   // axuliar de flotantes
         int contador = 1;//fin de varaiables auxiliares
@@ -224,13 +255,25 @@ public class Controlador {
         //  System.out.println("\nel Valor semilla inicial es: " + sem);
 
         while (contador <= iterative) {
+            
             proce = (nconstant * sem) % modo;  //formula Conguencial multiplicativo
-            prc = proce;
+             if(proce!=0)
+            {prc = proce;
             md = modo;
-            uresultado = prc / md;
-
-            //   System.out.println("valor de proce: " + proce);
-            //  System.out.println(String.format("Valor: %.3f", uresultado));
+            uresultado = prc / md;}
+            else
+            {
+              if(contador==1){
+                 uresultado=(float)aux2;
+                 contador=41;
+              }
+              
+              else
+              contador=41;
+            }
+            
+             // System.out.println("valor de la formula: " + proce);
+             // System.out.println(String.format("Valor: %.3f", uresultado));
             aux = proce; // aux para la siguente semilla
             sem = aux;     // semilla en la siguiente iteracion
 

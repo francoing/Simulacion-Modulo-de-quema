@@ -8,6 +8,7 @@ package controlador;
 import java.util.Random;
 import vista.*;
 import qca.QCA;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -34,6 +35,7 @@ public class Controlador {
 
     /*Pantallas del Modelo*/
     private Principal principal;
+    private resultados resultados;
 
     /*Variables del Modelo*/
     int H;
@@ -82,7 +84,10 @@ public class Controlador {
     int PB1 = 0;
     int PR1 = 0;
     
-    int gaux=0;             // Variable auxiliar g(u)
+    int gaux=0;             // Variable auxiliar semilla g(u)
+    int gconst=0;             // Variable auxiliar constante g(u)
+    int gmod=0;               // Variable auxiliar modo g(u)
+   
    
 
     public Controlador() {
@@ -94,10 +99,17 @@ public class Controlador {
         principal.setControlador(this);
         principal.setVisible(true);
     }
+    public void p(String valor){
+    if(valor.equals(vp.)){
+            vcategoria.setVisible(true);
+            
+        }
+    }
 
     public void emp(String atri) {
         if (atri.equals(principal.BTN_NUEVA_SIM)) {
              
+            
       
             /*Toma y Declaracion de variables*/
             H = principal.gethabitantes();
@@ -114,17 +126,21 @@ public class Controlador {
             while (i <= 150)//while de periodo de zafra
             {
                 Random semilla = new Random();//Numero Semilla Aleatorio
-                int sem = semilla.nextInt(4000) + 1000; // limitando entre 1000-5000 el modulo.
-                guardarvariable = getGU(sem);  //llama Gu(U)
+                int sem = semilla.nextInt(1000) + 2000; // limitando entre 1000-3000 la semilla.
+                Random constante = new Random();//Numero de Constante multiplicativa aleatorio
+                int consta = constante.nextInt(4000) + 2000; // limitando entre 2000-6000 el modulo.
+                Random modu = new Random();// Modo aleatorio
+                int mod = modu.nextInt(300) + 300; // limitando entre 300-600 el modulo.
+                guardarvariable = getGU(sem,consta,mod);  //llama Gu(U)
                 DQ = (int) ((-5.76) * Math.log(guardarvariable));
                 if (DQ < 1) {
                     DQ = 1;
                 }
                 System.out.println("\nDQ es: " + DQ);
 
-                guardarvariable = getGU(gaux);  //llama Gu(U)
+                guardarvariable = getGU(gaux,gconst,gmod);  //llama Gu(U)
                 if (guardarvariable <= 0.11) {
-                    guardarvariable = getGU(gaux);
+                    guardarvariable = getGU(gaux,gconst,gmod);
                     T = 70000 + (int) (14000 * guardarvariable);
                     System.out.println("\n Toneladas del Productor grande: " + T);
                     HA = T / 40;
@@ -132,7 +148,7 @@ public class Controlador {
                     System.out.println("Hectareas quemadas:" + HA);
                     //---------------------- Tiempo de quema de las Hectareas--------------------------------------------//
                     while (O <= HA) {
-                        guardarvariable = getGU(gaux);
+                        guardarvariable = getGU(gaux,gconst,gmod);
                         TIE = 10 + (int) (50 * guardarvariable);
                         TT1 = TT1 + TIE;
                         O++;
@@ -149,7 +165,7 @@ public class Controlador {
                     //--------------------------------------------------------------------------------------------------//
                 } else {
                     if (guardarvariable <= 0.35) {
-                        guardarvariable = getGU(gaux);
+                        guardarvariable = getGU(gaux,gconst,gmod);
                         T1 = 4000 + (int) (500 * guardarvariable);
                         System.out.println("\n Toneladas del productor mediano: " + T1);
                         HA1 = T1 / 40;
@@ -157,7 +173,7 @@ public class Controlador {
                         System.out.println("Hectareas quemadas:" + HA1);
                         //---------------------- Tiempo de quema de las Hectareas--------------------------------------------//
                         while (O1 <= HA1) {
-                            guardarvariable = getGU(gaux);
+                            guardarvariable = getGU(gaux,gconst,gmod);
                             TIE1 = 10 + (int) (50 * guardarvariable);
                             TT2 = TT2 + TIE1;
                             O1++;
@@ -172,7 +188,7 @@ public class Controlador {
                         HT = HT + HA1;
                         //--------------------------------------------------------------------------------------------------//
                     } else {
-                        guardarvariable = getGU(gaux);
+                        guardarvariable = getGU(gaux,gconst,gmod);
                         T2 = 20 + (int) (20 * guardarvariable);
                         System.out.println("\n Toneladas del Productor pequeño:" + T2);
                         HA2 = T2 / 40;
@@ -183,7 +199,7 @@ public class Controlador {
                         System.out.println("Hectareas quemadas:" + HA2 + "\nPM10 Generado: " + P3);
                         //---------------------- Tiempo de quema de las Hectareas--------------------------------------------//
                         while (O2 <= HA2) {
-                            guardarvariable = getGU(gaux);
+                            guardarvariable = getGU(gaux,gconst,gmod);
                             TIE2 = 10 + (int) (50 * guardarvariable);
                             System.out.println("\nTiempo parcial:" + TIE2);
                             TT3 = TT3 + TIE2;
@@ -212,7 +228,7 @@ public class Controlador {
                 O1 = 1;
                 O2 = 1;
                 
-                guardarvariable = getGU(gaux);
+                guardarvariable = getGU(gaux,gconst,gmod);
                 VE = V + (GA - V) * guardarvariable;
                 System.out.println("\nla velocidad minima del viento es: " + V + "\nla velocidad maxima del viento es: " + GA + "\n Velocidad generada =" + VE);
 
@@ -229,7 +245,7 @@ public class Controlador {
                // System.out.println("\nSegundo termino TERM1:" + TERM1);
                 R = (TERM2 - TERM1);
                 //System.out.println("\nResultado de la resta:" + R);
-                Form = Math.pow((double) L, (double) R) * CON / (DISY * DISY) * 0.8;
+                Form = (Math.pow((double) L, (double) R)) * CON / (DISY * DISY) * 0.8;
                 Form = Form * 1000;
 
                 System.out.println("\nDispersion de PM10: " + Form + " Mlg/m3");
@@ -244,9 +260,11 @@ public class Controlador {
                 if (Form <= 90) {
                     if (Form <= 32.5) {
                         while (PE1 <= H) {
-                            guardarvariable = getGU(gaux);
+                            guardarvariable = getGU(gaux,gconst,gmod);
                             if (guardarvariable <= 0.03) {
                                 PB++;
+                                PE1++;
+                                
                             } else {
                                 PE1++;
                             }
@@ -255,9 +273,10 @@ public class Controlador {
                         System.out.println("Personas de Riesgo Bajo:" + PB);
                     } else {
                         while (PE2 <= H) {
-                            guardarvariable = getGU(gaux);
+                            guardarvariable = getGU(gaux,gconst,gmod);
                             if (guardarvariable <= 0.06) {
                                 PM++;
+                                PE2++;
                             } else {
                                 PE2++;
                             }
@@ -269,9 +288,10 @@ public class Controlador {
 
                 } else {
                     while (PE <= H) {
-                        guardarvariable = getGU(gaux);
+                        guardarvariable = getGU(gaux,gconst,gmod);
                         if (guardarvariable <= 0.15) {
                             PR++;
+                            PE++;
                         } else {
                             PE++;
                         }
@@ -290,7 +310,7 @@ public class Controlador {
                     PBA = PB1 / CDQ;
                     PRA = PR1 / CDQ;
 
-                    System.out.println("\n La personas con riesgo de enfermendad media: " + PM1 + "\n La personas con riesgo de enfermendad Alta: " + PR1 + "\n La personas con riesgo de enfermendad Baja: " + PB1 + "\n La concentracion a los 30 dias es: " + CT + "KG/M");
+                    System.out.println("\n La personas con riesgo de enfermendad media: " + PMA + "\n La personas con riesgo de enfermendad Alta: " + PRA + "\n La personas con riesgo de enfermendad Baja: " + PBA + "\n La concentracion a los 30 dias es: " + CT + "KG/M");
 
                     bandera120 = 1;
                 } else {
@@ -301,7 +321,7 @@ public class Controlador {
                         PBA = PB1 / CDQ;
                         PRA = PR1 / CDQ;
 
-                        System.out.println("\n La personas con riesgo de enfermendad media: " + PM1 + "\n La personas con riesgo de enfermendad Alta: " + PR1 + "\n La personas con riesgo de enfermendad Baja: " + PB1 + "\n La concentracion a los 30 dias es: " + CT + "KG/M");
+                        System.out.println("\n La personas con riesgo de enfermendad media: " + PMA + "\n La personas con riesgo de enfermendad Alta: " + PRA + "\n La personas con riesgo de enfermendad Baja: " + PBA + "\n La concentracion a los 30 dias es: " + CT + "KG/M");
 
                         bandera90 = 1;
                     } else {
@@ -311,7 +331,7 @@ public class Controlador {
                             PBA = PB1 / CDQ;
                             PRA = PR1 / CDQ;
 
-                            System.out.println("\n La personas con riesgo de enfermendad media: " + PM1 + "\n La personas con riesgo de enfermendad Alta: " + PR1 + "\n La personas con riesgo de enfermendad Baja: " + PB1 + "\n La concentracion a los 30 dias es: " + CT + "KG/M");
+                            System.out.println("\n La personas con riesgo de enfermendad media: " + PMA + "\n La personas con riesgo de enfermendad Alta: " + PRA + "\n La personas con riesgo de enfermendad Baja: " + PBA + "\n La concentracion a los 30 dias es: " + CT + "KG/M");
                             bandera60 = 1;
                         } else {
 
@@ -320,7 +340,7 @@ public class Controlador {
                                 PBA = PB1 / CDQ;
                                 PRA = PR1 / CDQ;
 
-                                System.out.println("\n La personas con riesgo de enfermendad media: " + PM1 + "\n La personas con riesgo de enfermendad Alta: " + PR1 + "\n La personas con riesgo de enfermendad Baja: " + PB1 + "\n La concentracion a los 30 dias es: " + CT + "KG/M");
+                               System.out.println("\n La personas con riesgo de enfermendad media: " + PMA + "\n La personas con riesgo de enfermendad Alta: " + PRA + "\n La personas con riesgo de enfermendad Baja: " + PBA + "\n La concentracion a los 30 dias es: " + CT + "KG/M");
                                 bandera30 = 1;
                             } else {
 
@@ -337,41 +357,56 @@ public class Controlador {
             System.out.println("Emision total de gas PM10:" + CON + "Mlg/Cm3");
             System.out.println("Total de dias de quema:" + CDQ);
             System.out.println("Total de Hectareas quemadas:" + HT);
-            System.out.println("Personas afectadas con nivel de contaminacion alto:" + PR1);
-            System.out.println("Personas afectadas con nivel de contaminacion medio:" + PM1);
-            System.out.println("Personas afectadas con nivel de contaminacion Bajo:" + PB1);
+            System.out.println("Personas afectadas con nivel de contaminacion alto:" + PR1/CDQ);
+            System.out.println("Personas afectadas con nivel de contaminacion medio:" + PM1/CDQ);
+            System.out.println("Personas afectadas con nivel de contaminacion Bajo:" + PB1/CDQ);
 
         }
+        
+        mostrar();
     }
 
-    public double getGU(int a) {
-        //System.out.println("\n proce: "+gaux+"");
-
-         double aux2 = 0.53;
+    public double getGU(int a,int b,int c) {
+    
+         //  System.out.println("\nConstante multiplicativa: " + gconst);
+         //  System.out.println("\nResto: "+gmod);
+        
+        double aux2 = 0.53;
+        
+        
         int proce = 0;//inicio de variables auxliares
         float prc = 0; //auxiliar de flotantes
         float md = 0;   // axuliar de flotantes
         double uresultado = 0; 
         
-        int nconstant=3789;
-        int modo= 734;
+      
 
-        proce = (nconstant * a) % modo;  //formula Conguencial multiplicativo
+        proce = (b * a) % c;  //formula Conguencial multiplicativo
         if (proce != 0) {
             prc = proce;
-            md = modo;
+            md = c;
             uresultado = prc / md;
 
         } else {
             uresultado = aux2;
         }
         
-        //  System.out.println(String.format("Valor: %.3f", uresultado));
-        gaux=proce;                    // Proxima semilla - Variable Global
-        //System.out.println("valor de la formula: " + gaux);
+      
+        gaux=proce;             // Proxima semilla - Variable Global
+        gconst=b;
+        gmod=c;
+          // System.out.println("\n Semilla Actual: "+gaux);
+          //   System.out.println (String.format ("Valor:% .3f", uresultado));
+    
         return uresultado;
         
 
+    }
+    
+    public void mostrar(){
+        DefaultTableModel resultados = new DefaultTableModel();
+        resultados.addColumn("DQ");
+        resultados.addColumn("");
     }
     
    

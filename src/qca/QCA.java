@@ -6,6 +6,7 @@
 
 package qca;
 import controlador.Controlador;
+
 /**
  *
  * @author El´s
@@ -17,7 +18,8 @@ public class QCA {
      */
     public static void main(String[] args) {
           Controlador c=new Controlador();
-          c.ejecutar();   
+          c.ejecutar();
+          
     }
     
 }

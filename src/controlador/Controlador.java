@@ -87,11 +87,12 @@ public class Controlador {
     int gaux = 0;             // Variable auxiliar semilla g(u)
     int gconst = 0;             // Variable auxiliar constante g(u)
     int gmod = 0;               // Variable auxiliar modo g(u)
-    DefaultTableModel tr= new DefaultTableModel();
+    DefaultTableModel nodo= new DefaultTableModel();
     String med;
     String alt;
     String baj;
-
+    long itabla;
+    int Hectap;
     public Controlador() {
         principal = new Principal();
         Resultados = new resultados();
@@ -115,12 +116,13 @@ public class Controlador {
             GA = principal.getvientomaximo(); //Viento maximo
             DISY = principal.getdispersionY();
             DISZ = principal.getdispersionZ();
-
+            cargar();
             /*Fin de toma y Declaracion de variables*/
             System.out.println("habitantes: " + H + "\n distancia:" + D + "\n velocidad minima: " + V + "\n Velocidad maxima: " + GA + "\n dispersion Y: " + DISY + "\n Dispersion Z: " + DISZ);
 
             // guardarvariable=getGU();  //llama Gu(U)
             while (i <= 150)//while de periodo de zafra
+                
             {
                 Random semilla = new Random();//Numero Semilla Aleatorio
                 int sem = semilla.nextInt(1000) + 2000; // limitando entre 1000-3000 la semilla.
@@ -295,7 +297,9 @@ public class Controlador {
                 CDQ = CDQ + 1;
                 System.out.println("\nDias: " + CDQ);
                 i = i + DQ;
-
+                
+                itabla=+i; //variable auxiliar para saber que dia de los 150 dias se produce la quema en la tabla
+                    
                 if (i >= 120 && bandera120 == 0) {
 
                     PMA = PM1 / CDQ;
@@ -335,7 +339,9 @@ public class Controlador {
                                 System.out.println("\n La personas con riesgo de enfermendad media: " + PMA + "\n La personas con riesgo de enfermendad Alta: " + PRA + "\n La personas con riesgo de enfermendad Baja: " + PBA + "\n La concentracion a los 30 dias es: " + CT + "KG/M");
                                 bandera30 = 1;
                             } else {
-
+                                PMA = PM1 / CDQ;
+                                PBA = PB1 / CDQ;
+                                PRA = PR1 / CDQ;
                             }
                         }
                     }
@@ -346,16 +352,21 @@ public class Controlador {
                 
                
                 
-                
-                TT1 = 0;
-                TT2 = 0;
-                TT3 = 0;
+               
 
                 O = 1;
                 O1 = 1;
                 O2 = 1;
                 agregar();
+                TT1 = 0;
+                TT2 = 0;
+                TT3 = 0;
+                Hectap=0;//reiniciar valores para la tabla, no para el sistema
+                T=0;//reiniciar valores para la tabla, no para el sistema
+                T1=0;//reiniciar valores para la tabla, no para el sistema
+                T2=0;//reiniciar valores para la tabla, no para el sistema
             }
+                                
             System.out.println("\n-----------------------------------------------Informe Final de Periodo de Zafra-------------------------------------------");
             System.out.println("Emision total de gas PM10:" + CON + "Mlg/Cm3");
             System.out.println("Total de dias de quema:" + CDQ);
@@ -365,8 +376,16 @@ public class Controlador {
             System.out.println("Personas afectadas con nivel de contaminacion Bajo:" + PB1 / CDQ);
 
         }
-
+        Resultados.setDQ(CDQ);
+        Resultados.setHC(HT);
+        Resultados.setemi(CON);
         mostrar();
+        PMA = PM1 / CDQ;
+        PBA = PB1 / CDQ;
+        PRA = PR1 / CDQ;
+        Resultados.setemialto(PRA);
+        Resultados.setemimedio(PMA);
+        Resultados.setemibajo(PBA);
     }
 
     public double getGU(int a, int b, int c) {
@@ -393,13 +412,13 @@ public class Controlador {
         gaux = proce;             // Proxima semilla - Variable Global
         gconst = b;
         gmod = c;
-        // System.out.println("\n Semilla Actual: "+gaux);
+        //   System.out.println("\n Semilla Actual: "+gaux);
         //   System.out.println (String.format ("Valor:% .3f", uresultado));
 
         return uresultado;
 
     }
-
+   
     public void mostrar() {
         
         Resultados.setVisible(true);
@@ -408,58 +427,61 @@ public class Controlador {
         String sepequeño="pequeño";
         String semediano="mediano";
         String segrande="grande";
-        tr.addColumn("DQ");
-        tr.addColumn("Toneladas de caña");
-        tr.addColumn("Tipo de productor");
-        tr.addColumn("Hectareas quemadas");
-        tr.addColumn("PM10 generado");
-        tr.addColumn("Tiempo de quema en minutos");
-        tr.addColumn("Velocidad generada");
-        tr.addColumn("Dispersion de PM10");
-        tr.addColumn("Nivel de riesgo");
-        tr.addColumn("Personas afectadas");
-
+       
         String datos[] = new String[9];
 
-       int Hector=HA+HA1+HA2;
-           Hector=Hector*40;
-           int H1=Hector/40;
+      
+           int H1=T+T1+T2;
      
-        datos[0] = Integer.toString(DQ);
-        datos[1] = Integer.toString(Hector);
+        datos[0] = Long.toString(itabla);
         
-        if(Hector<3)
+        
+        if(H1<=40)
       {
-       datos[2] = sepequeño;
-          datos[5]=Integer.toString(TT3);
-         datos[8]=baj;
-         datos[9]=Integer.toString(PBA);
+       datos[1] = sepequeño;
+          datos[4]=Integer.toString(TT3);
+         datos[7]=baj;
+         datos[8]=Integer.toString(PBA);
       }
         else
-            {   if(Hector >1000)
-                 {      datos[2] = segrande;
-                    datos[5]=Integer.toString(TT1);
-                     datos[8]=alt;
-                     datos[9]=Integer.toString(PRA);
+            {   if(H1 >= 70000)
+                 {      datos[1] = segrande;
+                    datos[4]=Integer.toString(TT1);
+                     datos[7]=alt;
+                     datos[8]=Integer.toString(PRA);
                   }
             else{
-                datos[2] = semediano;
-                datos[5]=Integer.toString(TT2);
-                          datos[8]=med;
-                          datos[9]=Integer.toString(PMA);
+                datos[1] = semediano;
+                datos[4]=Integer.toString(TT2);
+                          datos[7]=med;
+                          datos[8]=Integer.toString(PMA);
             }
         }
-        datos[3]=Integer.toString(H1);
-        datos[4]=Float.toString(CON);
+        datos[2]=Integer.toString(H1);
+        datos[3]=Float.toString(CON);
       
-        datos[6]=Double.toString(VE);
-        datos[7]=Double.toString(Form);
+        datos[5]=Double.toString(VE);
+        datos[6]=Double.toString(Form);
         
         
       
                 
-        tr.addRow(datos);
+        nodo.addRow(datos);
         
-        Hector=0;
+        
      }
+    public void cargar()
+              {
+        nodo.addColumn("DQ");
+        nodo.addColumn("Tipo de productor");
+        nodo.addColumn("Toneladas quemadas");
+        nodo.addColumn("PM10 generado");
+        nodo.addColumn("Tiempo de quema en minutos");
+        nodo.addColumn("Velocidad generada");
+        nodo.addColumn("Dispersion de PM10");
+        nodo.addColumn("Nivel de riesgo");
+        nodo.addColumn("Personas afectadas");
+        resultados.tr.setModel(nodo);
+              }
+        
 }

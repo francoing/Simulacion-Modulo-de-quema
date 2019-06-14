@@ -6,6 +6,7 @@
 
 package vista;
 import controlador.Controlador;
+import static vista.resultados.BTN_RESULTADOS;
 
 /**
  *
@@ -15,6 +16,8 @@ public class Principal extends javax.swing.JFrame {
     private Controlador controlador;
     
     public static final String BTN_NUEVA_SIM = "NUEVA SIM";
+   // public static final String FRAME_RESULTADOS = "RESULTADOS";
+    
 
     /**
      * Creates new form Principal
@@ -402,6 +405,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         controlador.emp(BTN_NUEVA_SIM);
+        
        
         
         
